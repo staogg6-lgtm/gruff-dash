@@ -4,7 +4,9 @@
   "private": true,
   "dependencies": {
     "@capacitor/android": "latest",
-    "@capacitor/core": "latest"
+    "@capacitor/core": "latest",
+    "@capacitor-community/admob": "latest",
+    "cordova-plugin-purchase": "latest"
   },
   "devDependencies": {
     "@capacitor/assets": "latest",

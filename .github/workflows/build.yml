@@ -5,6 +5,11 @@ on:
   push:
     branches: [main]
 
+env:
+  # Your AdMob APP ID. Set it in GitHub: Settings > Secrets and variables > Actions > Variables > ADMOB_APP_ID.
+  # Until you do, Google's public TEST app ID is used (test ads only, no money).
+  ADMOB_APP_ID: ${{ vars.ADMOB_APP_ID || 'ca-app-pub-3940256099942544~3347511713' }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -33,10 +38,12 @@ jobs:
       - name: Sync web files and plugins
         run: npx cap sync android
 
-      - name: Lock portrait
+      - name: Lock portrait and add the AdMob app ID
         run: |
           M=android/app/src/main/AndroidManifest.xml
           sed -i 's/<activity /<activity android:screenOrientation="portrait" /' $M
+          sed -i "s#</application>#<meta-data android:name=\"com.google.android.gms.ads.APPLICATION_ID\" android:value=\"$ADMOB_APP_ID\"/></application>#" $M
+          grep -c APPLICATION_ID $M
 
       - name: Build debug APK
         working-directory: android
